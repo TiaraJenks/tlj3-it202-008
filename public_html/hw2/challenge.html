@@ -13,7 +13,9 @@
                 link.addEventListener("click", (event) => {
                     event.preventDefault();
                     const linkText = event.target.textContent;
+                    //Update the content of the <h1> tag with link text
                     document.querySelector("h1").textContent = linkText;
+                    //Update the content of the <title> tag with the link text
                     document.title = linkText;
                     updateCurrentPage(linkText);
                 });
@@ -63,10 +65,18 @@
             margin-right: 5px;
         }
 
+
         h1, nav a {
             text-transform: capitalize;
         }
 
+        body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f8f8; /* Light gray background */
+        color: #333; /* Dark text color */
+        line-height: 1.6; /* Improved readability with increased line height */
+    }
+        
         footer {
             background-color: #333;
             color: #fff;
@@ -75,6 +85,11 @@
             position: fixed;
             width: 100%;
             bottom: 0;
+        }
+
+        nav li::before {
+            content: ""; /* Remove the content */
+            margin-right: 0; /* Remove margin */
         }
 
     </style>
