@@ -8,13 +8,25 @@
         window.addEventListener("load", () => {
             console.log("loaded via javascript");
             //TODO: add any extra onload processing you may need here
+            const navLinks = document.querySelectorAll("nav a");
+            navLinks.forEach(link => {
+                link.addEventListener("click", (event) => {
+                    event.preventDefault();
+                    const linkText = event.target.textContent;
+                    document.querySelector("h1").textContent = linkText;
+                    document.title = linkText;
+                    updateCurrentPage(linkText);
+                });
+            });
         });
         function getCurrentSelection() {
             setTimeout(() => {
                 //added this delay here as some solutions may require it to update properly (i.e., click code may complete before the navigation changes)
                 //TODO: add code for processing the current selection 
+                const currentPageText = document.querySelector("h1").textContent;
 
                 //Note: likely you'll want to call updateCurrentPage towards the end
+                updateCurrentPage(currentPageText.toLowerCase());
             }, 100);
         }
     </script>
@@ -27,6 +39,44 @@
             background-color: lightcoral;
             display: flex;
         }
+
+        nav li {
+            padding: 10px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color:black;
+        }
+
+        nav a:hover {
+            color:blue;
+        }
+
+        ul {
+            list-style: none;
+            margin: 0;
+        }
+
+        li::before {
+            content: "✓";
+            margin-right: 5px;
+        }
+
+        h1, nav a {
+            text-transform: capitalize;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 5px;
+            text-align: center;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+
     </style>
     <!-- make the necessary edits above this line -->
 
