@@ -121,17 +121,51 @@ $username = get_username();
 
 <script>
     function validate(form) {
+        let email = form.email.value; 
+        let user = form.username.value;
+        let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        let userRegex = /^[a-zA-Z0-9_]{3,20}$/;
         let pw = form.newPassword.value;
         let con = form.confirmPassword.value;
+        let current = form.currentPassword.value;
         let isValid = true;
         //TODO add other client side validation....
 
         //example of using flash via javascript
         //find the flash container, create a new element, appendChild
-        if (pw !== con) {
-            flash("Password and Confrim password must match", "warning");
-            isValid = false;
+
+        if (email === "" || user === "") {
+            flash("All fields are required", "warning");
+            return false;
         }
+    
+        if (!emailRegex.test(email)) {
+            flash("Invalid email address", "warning");
+            return false;
+        }
+
+        if (!userRegex.test(user)) {
+            flash("Username must only contain 3-16 characters a-z, 0-9, _, or -", "warning");
+            return false;
+        }
+
+        if (pw !== "" || con !== "") {
+            if (current === "") {
+                flash("Current password is required to change password", "warning");
+                return false;
+            }
+            
+            if (pw.length < 8) {
+                flash("Password must be at least 8 characters long", "warning");
+                return false;
+            }
+            if (pw !== con) {
+                flash("New passwords don't match", "warning");
+                return false;
+            }
+        }
+
+
         return isValid;
     }
 </script>
