@@ -17,8 +17,19 @@ if(isset($_POST["action"])){
     if($name){
         if($action === "fetch"){
             $result = fetch_pokemon($name);
-            var_dump($result);
+            error_log("Data from API" .var_export($result, true));
+            //var_dump($result);
+            if($result){
+                $name = $result; //unsure if this is correct but since I didn't have $quote, I uses $name.
+            }
         }else if($action === "create"){
+            foreach($_POST as $key => $value){
+                if(!in_array($k, ["name", "base_experience", "weight"])){
+                    unset($_POST[$k]);
+                }
+                $name = $_POST; //unsure if this is correct
+                error_log("Cleaned up POST: " . var_export($name, true));
+            }
 
     }
 }else{
@@ -48,9 +59,9 @@ if(isset($_POST["action"])){
     </div>
     <div id="create" style="display: none;" class="tab-target">
         <form method="POST">
-            <?php render_input(["type" => "text", "name" => "name", "placeholder" => "Pokemon Name", "label" => "Pokemon Name", "rules" => ["required" => "required"]]); ?>
-            <?php render_input(["type" => "number", "name" => "name", "placeholder" => "Pokemon Base Experience", "label" => "Pokemon Base Experience", "rules" => ["required" => "required"]]); ?>
-            <?php render_input(["type" => "number", "name" => "name", "placeholder" => "Pokemon Weight", "label" => "Pokemon Weight", "rules" => ["required" => "required"]]); ?>
+            <?php render_input(["type" => "text", "name" => "Name", "placeholder" => "Pokemon Name", "label" => "Pokemon Name", "rules" => ["required" => "required"]]); ?>
+            <?php render_input(["type" => "number", "name" => "Base Experience", "placeholder" => "Pokemon Base Experience", "label" => "Pokemon Base Experience", "rules" => ["required" => "required"]]); ?>
+            <?php render_input(["type" => "number", "name" => "Weight", "placeholder" => "Pokemon Weight", "label" => "Pokemon Weight", "rules" => ["required" => "required"]]); ?>
 
             <?php render_input(["type" => "hidden", "name" => "action", "value" => "create"]); ?>
             <?php render_button(["text" => "Create", "type" => "submit"]); ?>
