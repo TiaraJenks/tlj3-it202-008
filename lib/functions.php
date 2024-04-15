@@ -28,4 +28,6 @@ require(__DIR__ . "/render_functions.php");
 
 require(__DIR__ . "/api_helper.php");
 
+require(__DIR__ . "/pokemon_api.php");
+
 ?>
