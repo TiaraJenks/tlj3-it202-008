@@ -30,7 +30,7 @@ if(isset($_POST["name"])){
                     unset($_POST[$k]);
                 }
                 $pokemon = $_POST; //unsure if this is correct
-                error_log("Cleaned up POST: " . var_export($poke, true));
+                error_log("Cleaned up POST: " . var_export($pokemon, true));
             }
 
        /* }
@@ -42,9 +42,10 @@ if(isset($_POST["name"])){
     $db = getDB();
     $query = "UPDATE INTO `IT202_S24_Pokemon` SET  ";
     $params = [];
+    $columns = [];
     //per record
-    foreach ($poke as $k=>$v){
-        array_push($columns, "'$k");
+    foreach ($pokemon as $k=>$v){
+        //array_push($columns, "'$k");
         if($params){
             $query .= ".";
         }
@@ -66,6 +67,7 @@ if(isset($_POST["name"])){
         error_log("Something broke with the query" . var_export($e, true));
         flash("An error occurred", "danger");
     }
+
 }
 
 $id = se($_GET, "id", -1, false);
@@ -109,6 +111,8 @@ if($pokemon){
             //error_log("Value: " . var_export($v, true));
         }
     }
+
+    
     //error_log("Form full data" . var_export($form, true));
 }
 //TODO handle manual create pokemon
