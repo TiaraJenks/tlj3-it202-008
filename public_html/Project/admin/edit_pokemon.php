@@ -15,21 +15,21 @@ if(isset($_POST["name"])){
     /* anything commented off may be deleted
     $action = $_POST["action"];
     $name = strtolower(se($_POST, "name", "", false));
-    $poke = []; //may change name
+    $pokemon = []; //may change name
     if($name){
         if($action === "fetch"){
             $result = fetch_pokemon($name);
             error_log("Data from API" .var_export($result, true));
             //var_dump($result);
             if($result){
-                $poke = $result; //unsure if this is correct but since I didn't have $quote, I used $poke.
+                $pokemon = $result; 
             }
         }else if($action === "create"){*/
             foreach($_POST as $k => $v){
                 if(!in_array($k, ["name", "base_experience", "weight"])){
                     unset($_POST[$k]);
                 }
-                $poke = $_POST; //unsure if this is correct
+                $pokemon = $_POST; //unsure if this is correct
                 error_log("Cleaned up POST: " . var_export($poke, true));
             }
 
@@ -53,7 +53,7 @@ if(isset($_POST["name"])){
         $params[":$k"] = $v;
         
     }
-    //left off at 1:07:30 (api integration - admin)
+    
     $query .= "(" . join(",", $columns) . ")";
     $query .= "VALUES (" . join(",", array_keys($params)) . ")";
     error_log("Query: " . $query);
@@ -68,7 +68,7 @@ if(isset($_POST["name"])){
     }
 }
 
-$id - se($_GET, "id", -1, false);
+$id = se($_GET, "id", -1, false);
 $pokemon = [];
 if($id > -1){
     //fetch
@@ -89,14 +89,14 @@ if($id > -1){
 }
 else{
     flash("Invalid id passed", "danger");
-    die(header("Location: " . get_url("admin/lists_pokemons.php")));
+    die(header("Location: " . get_url("admin/list_pokemons.php")));
 }
 
 if($pokemon){
     $form = [
-        ["type" => "text", "name" => "Name", "placeholder" => "Pokemon Name", "label" => "Pokemon Name", "rules" => ["required" => "required"]],
-        ["type" => "number", "name" => "Base Experience", "placeholder" => "Pokemon Base Experience", "label" => "Pokemon Base Experience", "rules" => ["required" => "required"]],
-        ["type" => "number", "name" => "Weight", "placeholder" => "Pokemon Weight", "label" => "Pokemon Weight", "rules" => ["required" => "required"]]
+        ["type" => "text", "name" => "name", "placeholder" => "Pokemon Name", "label" => "Pokemon Name", "rules" => ["required" => "required"]],
+        ["type" => "number", "name" => "base_experience", "placeholder" => "Pokemon Base Experience", "label" => "Pokemon Base Experience", "rules" => ["required" => "required"]],
+        ["type" => "number", "name" => "weight", "placeholder" => "Pokemon Weight", "label" => "Pokemon Weight", "rules" => ["required" => "required"]]
     ];
     $keys = array_keys($pokemon);
     //error_log("keys " . var_export($keys, true));
@@ -121,7 +121,7 @@ if($pokemon){
 
         }?>
 
-            <?php render_button(["text" => "Create", "type" => "submit"]); ?>
+            <?php render_button(["text" => "Create", "type" => "submit", "text"=>"Update"]); ?>
         </form>
     
 </div>

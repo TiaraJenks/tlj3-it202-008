@@ -59,6 +59,17 @@ session_start();
                         </ul>
                     </li>
                 <?php endif; ?>
+                <?php if (has_role("Admin")) : ?>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Poke Management
+                        </a> 
+                        <ul class="dropdown-menu">   
+                            <li><a class="dropdown-item" href="<?php echo get_url('admin/create_pokemon.php'); ?>">Create/Fetch a Pokemon</a></li>
+                            <li><a class="dropdown-item" href="<?php echo get_url('admin/list_pokemons.php'); ?>">Poke List</a></li>
+                        </ul>
+                    </li>
+                <?php endif; ?>
                 <?php if (is_logged_in()) : ?>
                     <li class="nav-item"><a class="nav-link" href="<?php echo get_url('logout.php'); ?>">Logout</a></li>
                 <?php endif; ?>
