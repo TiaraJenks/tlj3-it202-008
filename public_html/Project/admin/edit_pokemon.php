@@ -12,7 +12,7 @@ if (!has_role("Admin")) {
 
 //TODO handle pokemon fetch
 if(isset($_POST["name"])){
-    /*
+    /* anything commented off may be deleted
     $action = $_POST["action"];
     $name = strtolower(se($_POST, "name", "", false));
     $poke = []; //may change name

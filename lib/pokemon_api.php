@@ -11,18 +11,21 @@ function fetch_pokemon($name){
     } else {
         $result = [];
     }
+    //error_log("decoded res: " . var_export($result, true));
     var_dump($result);
 
+
     foreach($result as $index => $row) {
-        foreach($row as $key => $value) {
-            error_log(var_export($key, true). "=>" .var_export($value, true));
-            
-            if(!in_array($key, ["name", "base_experience", "weight"])) {
-                unset($result[$index][$key]);
+            //echo "$index=> $row";
+            if(!in_array($index, ["name", "base_experience", "weight"])) {
+                unset($result[$index]);
             }
         }
-    }
-    
+    echo "<pre>";
+    //var_dump($result);
+    echo "<pre>";
+    error_log("transform resp: " . var_export($result, true)); 
+        //die();
 
     /*tried to add new stuff from testApi.php (as seen in API Integration-Admin video)
      but it seems I didnt need a lot of the stuff I had, besides the db,
@@ -54,4 +57,5 @@ function fetch_pokemon($name){
     }
 
     return $result;      
+
 }
