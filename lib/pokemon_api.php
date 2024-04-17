@@ -11,8 +11,12 @@ function fetch_pokemon($name){
     } else {
         $result = [];
     }
-    error_log("decoded res: " . var_export($result, true));
+    //error_log("decoded res: " . var_export($result, true));
     //var_dump($result);
+    //check if $result doesn't have data
+    if(empty($result)){
+        throw new Exception("Pokemon not found");
+    }
 
 
     foreach($result as $index => $row) {

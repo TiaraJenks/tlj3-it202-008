@@ -17,11 +17,15 @@ if (isset($_POST["action"])) {
     $pokemon = [];
     if ($name) {
         if ($action === "fetch") {
-            $result = fetch_pokemon($name);
-            error_log("Data from API" . var_export($result, true));
-            if ($result) {
-                $pokemon = $result;
-                $pokemon["is_api"] = 1;
+            try {
+                $result = fetch_pokemon($name);
+                if ($result) {
+                    $pokemon = $result;
+                    $pokemon["is_api"] = 1;
+                }
+            } catch (Exception $e) {
+                error_log("Pokemon Not Found" . var_export($e, true));
+                flash("Pokemon Not Found ", "danger");
             }
         } else if ($action === "create") {
             foreach ($_POST as $k => $v) {
@@ -34,8 +38,11 @@ if (isset($_POST["action"])) {
         }
     } else {
         flash("You must provide a name for the Pokemon.", "warning");
-    }  
-   
+    }
+
+    //try/catch for displaying pokemon not found
+    
+
     //insert data
     try {
         //optional options for debugging and duplicate handling
@@ -60,8 +67,6 @@ if (isset($_POST["action"])) {
     } catch (Exception $e3) {
         error_log("Invalid data records" . var_export($e3, true));
         flash("Invalid data records", "danger");
-    
-
     }
 }
 
@@ -96,17 +101,17 @@ if (isset($_POST["action"])) {
     </div>
 </div>
 
-<script> 
-function switchTab(tab){
-    let target = document.getElementById(tab);
-    if(target){
-        let eles = document.getElementsByClassName("tab-target");
-        for(let ele of eles){
-            ele.style.display = (ele.id === tab)?"none" : "block";
-        }
+<script>
+    function switchTab(tab) {
+        let target = document.getElementById(tab);
+        if (target) {
+            let eles = document.getElementsByClassName("tab-target");
+            for (let ele of eles) {
+                ele.style.display = (ele.id === tab) ? "none" : "block";
+            }
 
+        }
     }
-}
 </script>
 
 <?php
