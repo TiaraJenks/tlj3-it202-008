@@ -35,19 +35,19 @@ if (count($_GET) > 0) {
     //name
     $name = se($_GET, "name", "", false);
     if(!empty($name)){
-        $query .= "AND name like :name";
+        $query .= " AND name like :name";
         $params[":name"] = "%$name%";
     }
     //base experience
     $base_experience = se($_GET, "base_experience", "", false);
     if(!empty($base_experience && $base_experience > -1)){
-        $query .= "AND base_experience = :base_experience";
+        $query .= " AND base_experience = :base_experience";
         $params[":base_experience"] = $base_experience;
     }
     //weight
     $weight = se($_GET, "weight", "", false);
     if(!empty($weight) && $weight > -1){
-        $query .= "AND weight = :weight";
+        $query .= " AND weight = :weight";
         $params[":weight"] = $weight;
     }
     //sort and order
@@ -60,7 +60,7 @@ if (count($_GET) > 0) {
         $order = "desc";
     }
     //IMPORTANT make sure you fully validate/trust $sort and $order (sql injection possibility)   
-    $query .= "ORDER BY $sort $order";
+    $query .= " ORDER BY $sort $order";
 
     try{
         $limit = (int)se($_GET, "limit", "10", false);
@@ -68,7 +68,7 @@ if (count($_GET) > 0) {
         $limit = 10;
     }
     //IMPORTANT make sure you fully validate/trust $limit (sql injection possibility)
-    $query .= "LIMIT $limit";
+    $query .= " LIMIT $limit";
 
 }
 
@@ -86,7 +86,7 @@ try {
     flash("Unhandled Error Occurred", "danger");
 }
 
-$table = ["data" => $results, "title" => "List of Pokemons", "ignored_columns" => ["id"], "edit_url" => get_url("admin/edit_pokemon.php"), "delete_url" => get_url("admin/delete_pokemon.php")]
+$table = ["data" => $results, "title" => "List of Pokemons", "ignored_columns" => ["id"], "edit_url" => get_url("admin/edit_pokemon.php"), "delete_url" => get_url("admin/delete_pokemon.php"), "view_url"=> get_url("admin/view_pokemon.php")]
 ?>
 <div class="container-fluid">
     <h3>Pokemon List</h3>
