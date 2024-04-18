@@ -40,25 +40,28 @@ if(isset($_POST["name"])){
 
     //insert data
     $db = getDB();
-    $query = "UPDATE INTO `IT202_S24_Pokemon` SET  ";
+    $query = "UPDATE `IT202_S24_Pokemon` SET ";
+    //$query = "WHERE 'id' = :id";
     $params = [];
     $columns = [];
     //per record
     foreach ($pokemon as $k=>$v){
         //array_push($columns, "'$k");
         if($params){
-            $query .= ".";
+            $query .= ",";
         }
         //be sure $k is trusted as this is a source of SQL injection
         $query .= "$k=:$k";
         $params[":$k"] = $v;
         
     }
+    $params[":id"] = $_GET["id"];
+    $query .= " WHERE `id` = :id";
     
-    $query .= "(" . join(",", $columns) . ")";
-    $query .= "VALUES (" . join(",", array_keys($params)) . ")";
+    //$query .= "(" . join(",", $columns) . ")";
+    //$query .= "VALUES (" . join(",", array_keys($params)) . ")";
     error_log("Query: " . $query);
-    error_log("Params: " . var_export($params));
+    error_log("Params: " . var_export($params, true));
     try{
         $stmt = $db->prepare($query);
         $stmt->execute($params);
