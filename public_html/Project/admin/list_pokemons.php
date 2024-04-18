@@ -104,6 +104,7 @@ $table = ["data" => $results, "title" => "List of Pokemons", "ignored_columns" =
     <?php render_table($table); ?>
 </div>
 
+
 <?php
 //note we need to go up 1 more directory
 require_once(__DIR__ . "/../../../partials/flash.php");
