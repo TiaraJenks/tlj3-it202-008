@@ -24,3 +24,4 @@ try {
     flash("Error deleting record", "danger");
 }
 die(header("Location: " . get_url("admin/list_pokemons.php")));
+
