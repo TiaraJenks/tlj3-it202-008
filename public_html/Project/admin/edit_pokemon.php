@@ -122,6 +122,7 @@ if($pokemon){
 ?>
 <div class="container-fluid">
     <h3>Edit a Pokemon</h3>
+    <a href="<?php echo get_url("admin/list_pokemons.php"); ?>" class="btn btn-secondary">Back</a>
     <form method="POST">
         <?php foreach($form as $k=>$v){
             render_input($v);
