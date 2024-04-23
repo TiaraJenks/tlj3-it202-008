@@ -14,3 +14,8 @@ function render_table($data = array())
 {
     include(__DIR__ . "/../partials/table.php");
 }
+
+function render_pokemon_card($pokemon = array())
+{
+    include(__DIR__ . "/../partials/pokemon_card.php");
+}

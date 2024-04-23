@@ -1,11 +1,7 @@
 <?php
 //note we need to go up 1 more directory
-require(__DIR__ . "/../../../partials/nav.php");
+require(__DIR__ . "/../../partials/nav.php");
 
-if (!has_role("Admin")) {
-    flash("You don't have permission to view this page", "warning");
-    redirect("home.php");
-}
 
 //build search form
 $form = [
@@ -21,7 +17,8 @@ $form = [
 error_log("Form data: " . var_export($form, true));
 
 
-$query = "SELECT id, name, base_experience, weight FROM `IT202_S24_Pokemon` WHERE 1=1";
+$query = "SELECT p.id, name, base_experience, weight, up.user_id FROM `IT202_S24_Pokemon` p
+LEFT JOIN `IT202-S24-UserPokemons` up on p.id = up.poke_id WHERE 1=1";
 $params = [];
 
 if (count($_GET) > 0) {
@@ -55,6 +52,10 @@ if (count($_GET) > 0) {
     if(!in_array($sort, ["name", "base_experience", "weight"])){
         $sort = "base_experience";
     }
+    //tell my sql I care about the data from table "p"
+    if($sort === "base_experience" || $sort = "weight"){
+        $sort = "p." . $sort;
+    }
     $order = se($_GET, "order", "", false); 
     if(!in_array($order, ["asc", "desc"])){
         $order = "desc";
@@ -86,10 +87,10 @@ try {
     flash("Unhandled Error Occurred", "danger");
 }
 
-$table = ["data" => $results, "title" => "List of Pokemons", "ignored_columns" => ["id"], "edit_url" => get_url("admin/edit_pokemon.php"), "delete_url" => get_url("admin/delete_pokemon.php"), "view_url"=> get_url("admin/view_pokemon.php")]
+$table = ["data" => $results, "title" => "List of Pokemons", "ignored_columns" => ["id"], "view_url"=> get_url("pokemon.php")]
 ?>
 <div class="container-fluid">
-    <h3>Pokemon List</h3>
+    <h3>Pokemons</h3>
     <form method="GET">
         <div class="row mb-3" style="align-items: flex-end;">
                 <?php foreach ($form as $k => $v):?>
@@ -102,11 +103,16 @@ $table = ["data" => $results, "title" => "List of Pokemons", "ignored_columns" =
         <?php render_button(["text" => "Search","type" => "submit", "text" => "Filter"]); ?>
         <a href="?clear" class="btn btn-secondary">Clear</a>
     </form>
-    <?php render_table($table); ?>
-</div>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 rows-cols-xl-5 rows-cols-xxl-6 g-4">
+    <?php foreach($results as $pokemon):?>
+        <div class="col">
+            <?php render_pokemon_card($pokemon);?>
+        </div>
+        <?php endforeach;?>
+    </div>
 
 
 <?php
 //note we need to go up 1 more directory
-require_once(__DIR__ . "/../../../partials/flash.php");
+require_once(__DIR__ . "/../../partials/flash.php");
 ?>

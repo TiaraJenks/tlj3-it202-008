@@ -1,11 +1,6 @@
 <?php
-//note we need to go up 1 more directory
-require(__DIR__ . "/../../../partials/nav.php");
+require(__DIR__ . "/../../partials/nav.php");
 
-if (!has_role("Admin")) {
-    flash("You don't have permission to view this page", "warning");
-    redirect("home.php");
-}
 ?>
 
 <?php
@@ -32,9 +27,9 @@ if($id > -1){
 }
 else{
     flash("Invalid id passed", "danger");
-    redirect("admin/list_pokemons.php");
+    redirect("pokemons.php");
 }
-/*
+
 if($pokemon){
     $form = [
         ["type" => "text", "name" => "name", "placeholder" => "Pokemon Name", "label" => "Pokemon Name", "rules" => ["required" => "required"]],
@@ -42,15 +37,16 @@ if($pokemon){
         ["type" => "number", "name" => "weight", "placeholder" => "Pokemon Weight", "label" => "Pokemon Weight", "rules" => ["required" => "required"]]
     ];
     $keys = array_keys($pokemon);
+
     //error_log("keys " . var_export($keys, true));
-    */
+    
     /*
     foreach ($form as $k => $v) {
         if (in_array($v["name"], $keys)) {
             $form[$k]["value"] = $_GET[$v["name"]];
         }
     }*/
-    /*
+    
     foreach($form as $k=>$v){
         //error_log("Form data" . var_export($v, true));
         if(in_array($v["name"], $keys)){
@@ -62,13 +58,19 @@ if($pokemon){
 
     
     //error_log("Form full data" . var_export($form, true));
-}*/
-
+}
 //TODO handle manual create pokemon
 ?>
 <div class="container-fluid">
     <h3>Pokemon: <?php se($pokemon, "name", "Unknown");?></h3>
-    <a href="<?php echo get_url("admin/list_pokemons.php"); ?>" class="btn btn-secondary">Back</a>
+    <a href="<?php echo get_url("pokemons.php"); ?>" class="btn btn-secondary">Back</a>
+    <form method="POST">
+        <?php foreach($form as $k=>$v){
+            render_input($v);
+
+        }?>
+
+        </form>
     
     <?php render_pokemon_card($pokemon);?>
     
@@ -76,6 +78,6 @@ if($pokemon){
 
 
 <?php
-//note we need to go up 1 more directory
-require_once(__DIR__ . "/../../../partials/flash.php");
+
+require_once(__DIR__ . "/../../partials/flash.php");
 ?>
