@@ -35,7 +35,7 @@ if (!isset($pokemon)) {
                     <a href="<?php echo get_url('api/purchase_pokemon.php?poke_id=' . $id); ?>" class="card-link">Purchase Pokemon</a>
 
                 <?php else : ?>
-
+                    <a href="<?php echo get_url("profile.php?id=".$pokemon["user_id"]);?>"><?php se($pokemon, "username", "Unknown");?>'s Profile</a>
                     <div class="bg-danger text-light text-center">Pokemon not available</div>
 
                 <?php endif; ?>
