@@ -1,10 +1,15 @@
 <?php
 //note we need to go up 1 more directory
-require(__DIR__ . "/../../partials/nav.php");
+require(__DIR__ . "/../../../partials/nav.php");
 
+if (!has_role("Admin")) {
+    flash("You don't have permission to view this page", "warning");
+    redirect("home.php");
+}
 
 //build search form
 $form = [
+    ["type" => "text", "name" => "username", "placeholder" => "Username", "label" => "Username", "include_margin"=>false],
     ["type" => "text", "name" => "name", "placeholder" => "Pokemon Name", "label" => "Pokemon Name", "include_margin"=>false],
     ["type" => "number", "name" => "base_experience", "placeholder" => "Pokemon Base Experience", "label" => "Pokemon Base Experience", "include_margin"=>false],
     ["type" => "number", "name" => "weight", "placeholder" => "Pokemon Weight", "label" => "Pokemon Weight", "include_margin"=>false],
@@ -14,14 +19,14 @@ $form = [
 
     ["type" => "number", "name" => "limit", "label" => "Limit", "value"=>"10", "include_margin"=>false]
 ];
-error_log("Form data: " . var_export($form, true));
+//error_log("Form data: " . var_export($form, true));
 
-$total_records = get_total_count("`IT202_S24_Pokemon` p LEFT JOIN `IT202-S24-UserPokemons` up on p.id = up.poke_id");
+$total_records = get_total_count("`IT202_S24_Pokemon` p
+JOIN `IT202-S24-UserPokemons` up ON p.id = up.poke_id");
 
-$query = "SELECT u.username, p.id, name, base_experience, weight, up.user_id FROM `IT202_S24_Pokemon` p
-LEFT JOIN `IT202-S24-UserPokemons` up on p.id = up.poke_id LEFT JOIN Users u on u.id = up.user_id WHERE 1=1";
+$query = "SELECT u.username, p.id, name, base_experience, weight, user_id FROM `IT202_S24_Pokemon` p
+JOIN `IT202-S24-UserPokemons` up ON p.id = up.poke_id JOIN Users u on u.id = up.user_id";
 $params = [];
-
 if (count($_GET) > 0) {
     $keys = array_keys($_GET);
 
@@ -29,6 +34,12 @@ if (count($_GET) > 0) {
         if (in_array($v["name"], $keys)) {
             $form[$k]["value"] = $_GET[$v["name"]];
         }
+    }
+    //username
+    $username = se($_GET, "username", "", false);
+    if(!empty($username)){
+        $query .= " AND u.username like :username";
+        $params[":username"] = "%$username%";
     }
     //name
     $name = se($_GET, "name", "", false);
@@ -91,7 +102,7 @@ try {
 $table = ["data" => $results, "title" => "List of Pokemons", "ignored_columns" => ["id"], "view_url"=> get_url("pokemon.php")]
 ?>
 <div class="container-fluid">
-    <h3>Pokemons</h3>
+    <h3>Associated Pokemons</h3>
     <form method="GET">
         <div class="row mb-3" style="align-items: flex-end;">
                 <?php foreach ($form as $k => $v):?>
@@ -115,11 +126,12 @@ $table = ["data" => $results, "title" => "List of Pokemons", "ignored_columns" =
             <div class="col">
                 No results to show
             </div>
-        <?php endif;?>   
+        <?php endif;?>    
     </div>
 </div>
 
+
 <?php
 //note we need to go up 1 more directory
-require_once(__DIR__ . "/../../partials/flash.php");
+require_once(__DIR__ . "/../../../partials/flash.php");
 ?>

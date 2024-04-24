@@ -34,41 +34,15 @@ else{
     flash("Invalid id passed", "danger");
     redirect("admin/list_pokemons.php");
 }
-/*
-if($pokemon){
-    $form = [
-        ["type" => "text", "name" => "name", "placeholder" => "Pokemon Name", "label" => "Pokemon Name", "rules" => ["required" => "required"]],
-        ["type" => "number", "name" => "base_experience", "placeholder" => "Pokemon Base Experience", "label" => "Pokemon Base Experience", "rules" => ["required" => "required"]],
-        ["type" => "number", "name" => "weight", "placeholder" => "Pokemon Weight", "label" => "Pokemon Weight", "rules" => ["required" => "required"]]
-    ];
-    $keys = array_keys($pokemon);
-    //error_log("keys " . var_export($keys, true));
-    */
-    /*
-    foreach ($form as $k => $v) {
-        if (in_array($v["name"], $keys)) {
-            $form[$k]["value"] = $_GET[$v["name"]];
-        }
-    }*/
-    /*
-    foreach($form as $k=>$v){
-        //error_log("Form data" . var_export($v, true));
-        if(in_array($v["name"], $keys)){
-           //error_log("IN ARRAY");
-            $form[$k]["value"] = $pokemon[$v["name"]];
-            //error_log("Value: " . var_export($v, true));
-        }
-    }
 
-    
-    //error_log("Form full data" . var_export($form, true));
-}*/
 
 //TODO handle manual create pokemon
 ?>
 <div class="container-fluid">
     <h3>Pokemon: <?php se($pokemon, "name", "Unknown");?></h3>
-    <a href="<?php echo get_url("admin/list_pokemons.php"); ?>" class="btn btn-secondary">Back</a>
+    <div>
+        <a href="<?php echo get_url("admin/list_pokemons.php"); ?>" class="btn btn-secondary">Back</a>
+    </div>    
     
     <?php render_pokemon_card($pokemon);?>
     

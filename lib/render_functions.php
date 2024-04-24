@@ -19,3 +19,6 @@ function render_pokemon_card($pokemon = array())
 {
     include(__DIR__ . "/../partials/pokemon_card.php");
 }
+function render_result_counts($result_count, $total_count){
+    include(__DIR__ . "/../partials/result_counts.php");
+}

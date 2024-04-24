@@ -12,6 +12,7 @@ if (isset($_GET["poke_id"]) && is_logged_in()) {
     $stmt = $db->prepare($query);
     $stmt->execute([":user_id"=>get_user_id(), ":poke_id"=>$_GET["poke_id"]]);
     flash("Congratulations! You purchased the Pokemon!", "success");
+    redirect("my_pokemons.php");
     }catch(PDOException $e){
         if($e->errorInfo[1] === 1062){
             flash("This Pokemon is not available.", "danger");

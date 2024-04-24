@@ -43,6 +43,7 @@ session_start();
                     <li class="nav-item"><a class="nav-link" href="<?php echo get_url('home.php'); ?>">Home</a></li>
                     <li class="nav-item"><a class="nav-link" href="<?php echo get_url('profile.php'); ?>">Profile</a></li>
                     <li class="nav-item"><a class="nav-link" href="<?php echo get_url('pokemons.php'); ?>">Pokemons</a></li>
+                    <li class="nav-item"><a class="nav-link" href="<?php echo get_url('available_pokemons.php'); ?>">Available</a></li>
                     <li class="nav-item"><a class="nav-link" href="<?php echo get_url('my_pokemons.php'); ?>">My Pokemons</a></li>
                 <?php endif; ?>
                 <?php if (!is_logged_in()) : ?>
@@ -52,7 +53,7 @@ session_start();
                 <?php if (has_role("Admin")) : ?>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Admin
+                            Roles
                         </a> 
                         <ul class="dropdown-menu">   
                             <li><a class="dropdown-item" href="<?php echo get_url('admin/create_role.php'); ?>">Create Role</a></li>
@@ -69,6 +70,7 @@ session_start();
                         <ul class="dropdown-menu">   
                             <li><a class="dropdown-item" href="<?php echo get_url('admin/create_pokemon.php'); ?>">Create/Fetch a Pokemon</a></li>
                             <li><a class="dropdown-item" href="<?php echo get_url('admin/list_pokemons.php'); ?>">Poke List</a></li>
+                            <li><a class="dropdown-item" href="<?php echo get_url('admin/pokemon_associations.php'); ?>">Poke Associations</a></li>
                         </ul>
                     </li>
                 <?php endif; ?>

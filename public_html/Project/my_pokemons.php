@@ -1,7 +1,22 @@
 <?php
 //note we need to go up 1 more directory
 require(__DIR__ . "/../../partials/nav.php");
+$db = getDB();
 
+//remove all associations
+if(isset($_GET["remove"])){
+    $query = "DELETE FROM `IT202-S24-UserPokemons` WHERE user_id = :user_id";
+    try{
+        $stmt = $db->prepare($query);
+        $stmt->execute([":user_id"=>get_user_id()]);
+        flash("Successfully removed all Pokemons!", "success");
+    }catch(PDOException $e){
+        error_log("Error removing Pokemon associations" . var_export($e, true));
+        flash("Error removing Pokemon associations", "danger");
+    }
+
+    redirect("my_pokemons.php");
+}
 
 //build search form
 $form = [
@@ -16,6 +31,9 @@ $form = [
 ];
 //error_log("Form data: " . var_export($form, true));
 
+$total_records = get_total_count("`IT202_S24_Pokemon` p
+JOIN `IT202-S24-UserPokemons` up ON p.id = up.poke_id
+WHERE user_id = :user_id", [":user_id"=>get_user_id()]);
 
 $query = "SELECT p.id, name, base_experience, weight, user_id FROM `IT202_S24_Pokemon` p
 JOIN `IT202-S24-UserPokemons` up ON p.id = up.poke_id
@@ -74,7 +92,7 @@ if (count($_GET) > 0) {
 
 }
 
-$db = getDB();
+
 $stmt = $db->prepare($query);
 $results = [];
 try {
@@ -92,6 +110,9 @@ $table = ["data" => $results, "title" => "List of Pokemons", "ignored_columns" =
 ?>
 <div class="container-fluid">
     <h3>My Pokemons</h3>
+    <div>
+        <a href="?remove" onclick="confirm('Are you sure?')?'':event.preventDefault()" class="btn btn-danger">Remove all Pokemons</a>
+    </div>
     <form method="GET">
         <div class="row mb-3" style="align-items: flex-end;">
                 <?php foreach ($form as $k => $v):?>
@@ -104,13 +125,20 @@ $table = ["data" => $results, "title" => "List of Pokemons", "ignored_columns" =
         <?php render_button(["text" => "Search","type" => "submit", "text" => "Filter"]); ?>
         <a href="?clear" class="btn btn-secondary">Clear</a>
     </form>
+    <?php render_result_counts(count($results), $total_records);?>
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 rows-cols-xl-5 rows-cols-xxl-6 g-4">
     <?php foreach($results as $pokemon):?>
         <div class="col">
             <?php render_pokemon_card($pokemon);?>
         </div>
         <?php endforeach;?>
+        <?php if(count($results) === 0):?>
+            <div class="col">
+                No results to show
+            </div>
+        <?php endif;?>    
     </div>
+</div>
 
 
 <?php

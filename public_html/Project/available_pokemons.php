@@ -2,6 +2,10 @@
 //note we need to go up 1 more directory
 require(__DIR__ . "/../../partials/nav.php");
 
+if (!has_role("Admin")) {
+    flash("You don't have permission to view this page", "warning");
+    redirect("home.php");
+}
 
 //build search form
 $form = [
@@ -16,10 +20,10 @@ $form = [
 ];
 error_log("Form data: " . var_export($form, true));
 
-$total_records = get_total_count("`IT202_S24_Pokemon` p LEFT JOIN `IT202-S24-UserPokemons` up on p.id = up.poke_id");
+$total_records = get_total_count("`IT202_S24_Pokemon` p WHERE p.id NOT IN (SELECT poke_id FROM `IT202-S24-UserPokemons`)");
 
-$query = "SELECT u.username, p.id, name, base_experience, weight, up.user_id FROM `IT202_S24_Pokemon` p
-LEFT JOIN `IT202-S24-UserPokemons` up on p.id = up.poke_id LEFT JOIN Users u on u.id = up.user_id WHERE 1=1";
+$query = "SELECT p.id, name, base_experience, weight FROM `IT202_S24_Pokemon` p
+WHERE p.id NOT IN (SELECT poke_id FROM `IT202-S24-UserPokemons`)";
 $params = [];
 
 if (count($_GET) > 0) {
@@ -91,7 +95,7 @@ try {
 $table = ["data" => $results, "title" => "List of Pokemons", "ignored_columns" => ["id"], "view_url"=> get_url("pokemon.php")]
 ?>
 <div class="container-fluid">
-    <h3>Pokemons</h3>
+    <h3>Available Pokemons</h3>
     <form method="GET">
         <div class="row mb-3" style="align-items: flex-end;">
                 <?php foreach ($form as $k => $v):?>

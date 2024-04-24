@@ -8,72 +8,35 @@ require(__DIR__ . "/../../partials/nav.php");
 $id = se($_GET, "id", -1, false);
 
 $pokemon = [];
-if($id > -1){
+if ($id > -1) {
     //fetch
     $db = getDB();
     $query = "SELECT name, base_experience, weight, created, modified FROM `IT202_S24_Pokemon` WHERE id = :id";
-    try{
+    try {
         $stmt = $db->prepare($query);
-        $stmt->execute([":id"=>$id]);
+        $stmt->execute([":id" => $id]);
         $r = $stmt->fetch();
-        if($r){
+        if ($r) {
             $pokemon = $r;
         }
-    }
-    catch(PDOException $e){
+    } catch (PDOException $e) {
         error_log("Error fetching record: " . var_export($e, true));
         flash("Error fetching record", "danger");
     }
-}
-else{
+} else {
     flash("Invalid id passed", "danger");
     redirect("pokemons.php");
 }
 
-if($pokemon){
-    $form = [
-        ["type" => "text", "name" => "name", "placeholder" => "Pokemon Name", "label" => "Pokemon Name", "rules" => ["required" => "required"]],
-        ["type" => "number", "name" => "base_experience", "placeholder" => "Pokemon Base Experience", "label" => "Pokemon Base Experience", "rules" => ["required" => "required"]],
-        ["type" => "number", "name" => "weight", "placeholder" => "Pokemon Weight", "label" => "Pokemon Weight", "rules" => ["required" => "required"]]
-    ];
-    $keys = array_keys($pokemon);
-
-    //error_log("keys " . var_export($keys, true));
-    
-    /*
-    foreach ($form as $k => $v) {
-        if (in_array($v["name"], $keys)) {
-            $form[$k]["value"] = $_GET[$v["name"]];
-        }
-    }*/
-    
-    foreach($form as $k=>$v){
-        //error_log("Form data" . var_export($v, true));
-        if(in_array($v["name"], $keys)){
-           //error_log("IN ARRAY");
-            $form[$k]["value"] = $pokemon[$v["name"]];
-            //error_log("Value: " . var_export($v, true));
-        }
-    }
-
-    
-    //error_log("Form full data" . var_export($form, true));
-}
 //TODO handle manual create pokemon
 ?>
 <div class="container-fluid">
-    <h3>Pokemon: <?php se($pokemon, "name", "Unknown");?></h3>
-    <a href="<?php echo get_url("pokemons.php"); ?>" class="btn btn-secondary">Back</a>
-    <form method="POST">
-        <?php foreach($form as $k=>$v){
-            render_input($v);
+    <h3>Pokemon: <?php se($pokemon, "name", "Unknown"); ?></h3>
+    <div>
+        <a href="<?php echo get_url("pokemons.php"); ?>" class="btn btn-secondary">Back</a>
+    </div>
+    <?php render_pokemon_card($pokemon); ?>
 
-        }?>
-
-        </form>
-    
-    <?php render_pokemon_card($pokemon);?>
-    
 </div>
 
 
