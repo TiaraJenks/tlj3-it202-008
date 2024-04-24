@@ -35,8 +35,8 @@ $total_records = get_total_count("`IT202_S24_Pokemon` p
 JOIN `IT202-S24-UserPokemons` up ON p.id = up.poke_id
 WHERE user_id = :user_id", [":user_id"=>get_user_id()]);
 
-$query = "SELECT username, p.id, name, base_experience, weight, user_id FROM `IT202_S24_Pokemon` p
-JOIN `IT202-S24-UserPokemons` up ON p.id = up.poke_id LEFT JOIN Users u ON u.id = up.user_id
+$query = "SELECT p.id, name, base_experience, weight, user_id FROM `IT202_S24_Pokemon` p
+JOIN `IT202-S24-UserPokemons` up ON p.id = up.poke_id
 WHERE user_id = :user_id";
 $params = [":user_id"=>get_user_id()];
 
