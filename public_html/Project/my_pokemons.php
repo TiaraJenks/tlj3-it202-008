@@ -1,10 +1,21 @@
 <?php
 //note we need to go up 1 more directory
-require(__DIR__ . "/../../../partials/nav.php");
+require(__DIR__ . "/../../partials/nav.php");
+$db = getDB();
 
-if (!has_role("Admin")) {
-    flash("You don't have permission to view this page", "warning");
-    redirect("home.php");
+//remove all associations
+if(isset($_GET["remove"])){
+    $query = "DELETE FROM `IT202-S24-UserPokemons` WHERE user_id = :user_id";
+    try{
+        $stmt = $db->prepare($query);
+        $stmt->execute([":user_id"=>get_user_id()]);
+        flash("Successfully removed all Pokemons!", "success");
+    }catch(PDOException $e){
+        error_log("Error removing Pokemon associations" . var_export($e, true));
+        flash("Error removing Pokemon associations", "danger");
+    }
+
+    redirect("my_pokemons.php");
 }
 
 //build search form
@@ -18,12 +29,16 @@ $form = [
 
     ["type" => "number", "name" => "limit", "label" => "Limit", "value"=>"10", "include_margin"=>false]
 ];
-error_log("Form data: " . var_export($form, true));
+//error_log("Form data: " . var_export($form, true));
 
-$total_records = get_total_count("`IT202_S24_Pokemon`");
+$total_records = get_total_count("`IT202_S24_Pokemon` p
+JOIN `IT202-S24-UserPokemons` up ON p.id = up.poke_id
+WHERE user_id = :user_id", [":user_id"=>get_user_id()]);
 
-$query = "SELECT id, name, base_experience, weight FROM `IT202_S24_Pokemon` WHERE 1=1";
-$params = [];
+$query = "SELECT p.id, name, base_experience, weight, user_id FROM `IT202_S24_Pokemon` p
+JOIN `IT202-S24-UserPokemons` up ON p.id = up.poke_id
+WHERE user_id = :user_id";
+$params = [":user_id"=>get_user_id()];
 
 if (count($_GET) > 0) {
     $keys = array_keys($_GET);
@@ -56,6 +71,10 @@ if (count($_GET) > 0) {
     if(!in_array($sort, ["name", "base_experience", "weight"])){
         $sort = "base_experience";
     }
+    //tell my sql I care about the data from table "p"
+    if($sort === "base_experience" || $sort = "weight"){
+        $sort = "p." . $sort;
+    }
     $order = se($_GET, "order", "", false); 
     if(!in_array($order, ["asc", "desc"])){
         $order = "desc";
@@ -73,7 +92,7 @@ if (count($_GET) > 0) {
 
 }
 
-$db = getDB();
+
 $stmt = $db->prepare($query);
 $results = [];
 try {
@@ -87,10 +106,13 @@ try {
     flash("Unhandled Error Occurred", "danger");
 }
 
-$table = ["data" => $results, "title" => "List of Pokemons", "ignored_columns" => ["id"], "edit_url" => get_url("admin/edit_pokemon.php"), "delete_url" => get_url("admin/delete_pokemon.php"), "view_url"=> get_url("admin/view_pokemon.php")]
+$table = ["data" => $results, "title" => "List of Pokemons", "ignored_columns" => ["id"], "view_url"=> get_url("pokemon.php")]
 ?>
 <div class="container-fluid">
-    <h3>Pokemon List</h3>
+    <h3>My Pokemons</h3>
+    <div>
+        <a href="?remove" onclick="confirm('Are you sure?')?'':event.preventDefault()" class="btn btn-danger">Remove all Pokemons</a>
+    </div>
     <form method="GET">
         <div class="row mb-3" style="align-items: flex-end;">
                 <?php foreach ($form as $k => $v):?>
@@ -104,12 +126,22 @@ $table = ["data" => $results, "title" => "List of Pokemons", "ignored_columns" =
         <a href="?clear" class="btn btn-secondary">Clear</a>
     </form>
     <?php render_result_counts(count($results), $total_records);?>
-    <?php render_table($table); ?>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 rows-cols-xl-5 rows-cols-xxl-6 g-4">
+    <?php foreach($results as $pokemon):?>
+        <div class="col">
+            <?php render_pokemon_card($pokemon);?>
+        </div>
+        <?php endforeach;?>
+        <?php if(count($results) === 0):?>
+            <div class="col">
+                No results to show
+            </div>
+        <?php endif;?>    
+    </div>
 </div>
-
 
 
 <?php
 //note we need to go up 1 more directory
-require_once(__DIR__ . "/../../../partials/flash.php");
+require_once(__DIR__ . "/../../partials/flash.php");
 ?>
