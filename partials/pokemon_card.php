@@ -30,8 +30,8 @@ if (!isset($pokemon)) {
                 <?php endif; ?>
 
                 <!-- Add delete button -->
-                <?php if (isset($pokemon["user_id"]) && $pokemon["user_id"] !== "N/A") : ?>
-                    <a href="<?php echo get_url("admin/delete_association.php?poke_id=" . $pokemon["id"]); ?>" class="btn btn-danger">Delete</a>
+                <?php if (isset($pokemon["user_id"]) && $pokemon["id"] !== "N/A") : ?>
+                    <a href="<?php echo get_url("admin/delete_relationship.php?poke_id=" . $pokemon["id"] . "&user_id=" . $pokemon["user_id"]);?>"onclick="confirm('Are you sure?')?'':event.preventDefault()" class="btn btn-danger">Delete</a>
                 <?php endif; ?>
 
                 <?php if (!isset($pokemon["user_id"]) || $pokemon["user_id"] === "N/A") : ?>
