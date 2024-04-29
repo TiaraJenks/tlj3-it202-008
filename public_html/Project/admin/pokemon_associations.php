@@ -24,7 +24,7 @@ $form = [
 $total_records = get_total_count("`IT202_S24_Pokemon` p
 JOIN `IT202-S24-UserPokemons` up ON p.id = up.poke_id");
 
-$query = "SELECT u.username, p.id, up.id as user_pokemon_id, p.name, p.base_experience, p.weight, up.user_id FROM `IT202_S24_Pokemon` p
+$query = "SELECT u.username, p.id, name, base_experience, weight, user_id FROM `IT202_S24_Pokemon` p
 JOIN `IT202-S24-UserPokemons` up ON p.id = up.poke_id JOIN Users u on u.id = up.user_id";
 $params = [];
 if (count($_GET) > 0) {
@@ -109,7 +109,8 @@ $table = ["data" => $results, "title" => "List of Pokemons", "ignored_columns" =
                     <div class="col-2">
                        <?php render_input($v);?>
                     </div>
-                <?php endforeach;?>          
+                <?php endforeach;?>
+                
         </div>
         <?php render_button(["text" => "Search","type" => "submit", "text" => "Filter"]); ?>
         <a href="?clear" class="btn btn-secondary">Clear</a>
@@ -119,13 +120,7 @@ $table = ["data" => $results, "title" => "List of Pokemons", "ignored_columns" =
     <?php foreach($results as $pokemon):?>
         <div class="col">
             <?php render_pokemon_card($pokemon);?>
-            <!-- Add delete button -->
-            <form method="POST" onsubmit="return confirm('Are you sure you want to delete this relationship?');" action="<?php echo get_url("admin/delete_relationship.php"); ?>">
-                <input type="hidden" name="pokemon_id" value="<?php echo $pokemon['id']; ?>">
-                <button type="submit" class="btn btn-danger">Delete</button>
-            </form>
         </div>
-        
         <?php endforeach;?>
         <?php if(count($results) === 0):?>
             <div class="col">
@@ -134,7 +129,6 @@ $table = ["data" => $results, "title" => "List of Pokemons", "ignored_columns" =
         <?php endif;?>    
     </div>
 </div>
-
 
 
 <?php
