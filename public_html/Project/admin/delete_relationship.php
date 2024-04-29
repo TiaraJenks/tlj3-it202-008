@@ -11,6 +11,7 @@ if(isset($_GET["user_id"]) && isset($_GET["poke_id"])){
     $user_id = $_GET["user_id"];
     $poke_id = $_GET["poke_id"];
     $query = "DELETE FROM `IT202-S24-UserPokemons` WHERE user_id = :user_id AND poke_id = :poke_id";
+    $db = getDB();
     try{
         $stmt = $db->prepare($query);
         $stmt->execute([":user_id" => $user_id, ":poke_id" => $poke_id]);
@@ -21,6 +22,6 @@ if(isset($_GET["user_id"]) && isset($_GET["poke_id"])){
     }
 }
 
-redirect("admin/pokemon_associations.php");
+redirect("my_pokemons.php");
 ?>
 
