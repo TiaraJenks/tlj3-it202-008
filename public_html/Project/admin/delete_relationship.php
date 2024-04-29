@@ -7,24 +7,20 @@ if (!has_role("Admin")) {
     redirect("home.php");
 }
 
-$id = se($_GET, "id", -1, false);
-if ($id < 1) {
-    flash("Invalid id passed to delete", "danger");
-    redirect("admin/list_pokemons.php");
-}
-
-try {
-    $db = getDB();
-    $query = "DELETE FROM `IT202-S24-UserPokemons` WHERE id = :user_pokemon_id";
-    $stmt = $db->prepare($query);
-    $stmt->bindValue(":user_pokemon_id", $id);
-    $stmt->execute();
-    flash("Deleted association successfully", "success");
-} catch (PDOException $e) {
-    // Handle errors
-    error_log("Delete relationship: " . var_export($e, true));
-    flash("Potential error with delete relationship", "danger");
+if(isset($_GET["user_id"]) && isset($_GET["poke_id"])){
+    $user_id = $_GET["user_id"];
+    $poke_id = $_GET["poke_id"];
+    $query = "DELETE FROM `IT202-S24-UserPokemons` WHERE user_id = :user_id AND poke_id = :poke_id";
+    try{
+        $stmt = $db->prepare($query);
+        $stmt->execute([":user_id" => $user_id, ":poke_id" => $poke_id]);
+        flash("Successfully removed your Pokemon!", "success");
+    }catch(PDOException $e){
+        error_log("Error removing Pokemon association: " . var_export($e, true));
+        flash("Error removing Pokemon association", "danger");
+    }
 }
 
 redirect("admin/pokemon_associations.php");
 ?>
+
