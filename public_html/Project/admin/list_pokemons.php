@@ -4,7 +4,7 @@ require(__DIR__ . "/../../../partials/nav.php");
 
 if (!has_role("Admin")) {
     flash("You don't have permission to view this page", "warning");
-    die(header("Location: $BASE_PATH" . "/home.php"));
+    redirect("home.php");
 }
 
 //build search form
@@ -20,6 +20,7 @@ $form = [
 ];
 error_log("Form data: " . var_export($form, true));
 
+$total_records = get_total_count("`IT202_S24_Pokemon`");
 
 $query = "SELECT id, name, base_experience, weight FROM `IT202_S24_Pokemon` WHERE 1=1";
 $params = [];
@@ -100,9 +101,12 @@ $table = ["data" => $results, "title" => "List of Pokemons", "ignored_columns" =
                 
         </div>
         <?php render_button(["text" => "Search","type" => "submit", "text" => "Filter"]); ?>
+        <a href="?clear" class="btn btn-secondary">Clear</a>
     </form>
+    <?php render_result_counts(count($results), $total_records);?>
     <?php render_table($table); ?>
 </div>
+
 
 
 <?php
