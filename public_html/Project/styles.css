@@ -1,0 +1,28 @@
+.alert-info {
+    color: azure !important;
+    border-color: azure;
+    background-color: rgb(128, 37, 37);
+}
+
+nav li {
+    display: inline;
+    background-color: rgb(128, 37, 37);
+}
+
+nav li a {
+    color: rgb(5, 0, 153);
+}
+
+input {
+    border-radius: 40%;
+}
+
+body {
+    background-color: cornflowerblue;
+    color: azure;
+
+}
+
+.nav-link {
+    color: azure !important;
+}
