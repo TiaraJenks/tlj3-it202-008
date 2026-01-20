@@ -1,9 +1,9 @@
 #IT 202 Project Proposal
 
 ## Name: Tiara Jenkins
-### Project: Pokemon NFT
-### Project Summary: This project will allow users to look through the Pokemon market and purchase any NFT they desire. Admins will be able to assign roles to certain users, create/fetch more Pokemons, manage the existing ones, view the available ones, and change the associations between users and pokemons. They manage everything involving users and pokemons. 
-## Go fetch your Pokemon NFTs! 
+### Project: Pokemon Trading Cards
+### Project Summary: This project will allow users to look through the Pokemon market and purchase any Card they desire. Admins will be able to assign roles to certain users, create/fetch more Pokemons, manage the existing ones, view the available ones, and change the associations between users and pokemons. They manage everything involving users and pokemons. 
+## Go fetch your Pokemon Cards! 
 
 ### Link to Demo: https://youtu.be/oTQHplykSrY?si=twbmal07HwnxR0ph
 ### GitHub Link: https://github.com/TiaraJenks/tlj3-it202-008/tree/prod
